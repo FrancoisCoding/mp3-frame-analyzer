@@ -56,14 +56,14 @@ export function ResultCard({ result }: IResultCardProps) {
           </div>
 
           <p className="mt-5 text-[0.72rem] uppercase tracking-[0.26em] text-[var(--text-soft)]">
-            Xing-style frame count
+            Requirement count (Xing style)
           </p>
           <div className="mt-3 flex flex-wrap items-end gap-4">
             <div className="font-[var(--font-display)] text-[clamp(3.4rem,10vw,7rem)] leading-none tracking-[-0.08em] text-[var(--text-strong)]">
               {displayCount.toLocaleString()}
             </div>
             <div className="pb-2 text-sm text-[var(--text-muted)]">
-              Requirement-facing count aligned to the Xing metadata convention.
+              Matches tools that report the Xing metadata frame count.
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ export function ResultCard({ result }: IResultCardProps) {
               icon: HardDriveDownload,
             },
             {
-              label: 'Logical Frames',
+              label: 'Full Stream Count',
               value: result.logicalFrameCount.toLocaleString(),
               icon: Layers3,
             },

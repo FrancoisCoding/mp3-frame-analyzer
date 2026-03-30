@@ -29,7 +29,7 @@ function getValidationError(file: File) {
   const isMp3ByName = file.name.toLowerCase().endsWith('.mp3');
 
   if (!isMp3ByType && !isMp3ByName) {
-    return 'Only MP3 files are accepted by this analyzer.';
+    return 'Choose an MP3 file with MPEG1 Layer 3 audio.';
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -163,8 +163,8 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                   </h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-muted)] sm:text-base">
                     The parser locks onto valid consecutive MPEG1 Layer III frames, skips ID3v2
-                    headers, and returns the Xing-style frame count alongside the full logical
-                    stream count.
+                    headers, and reports both the requirement-facing Xing count and the full
+                    logical stream count.
                   </p>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                     Output
                   </p>
                   <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">
-                    Xing and logical counts
+                    Requirement and full counts
                   </p>
                 </div>
               </div>
@@ -284,7 +284,7 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                 exit={{ opacity: 0, y: -10 }}
               >
                 <LoaderCircle className="h-4 w-4 animate-spin text-[var(--accent-cool)]" />
-                Running frame sequence verification on the uploaded stream.
+                Analyzing the uploaded stream and validating frame sequence integrity.
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -313,12 +313,12 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
             Validation Rules
           </p>
           <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--text-muted)]">
-            <li>Rejects non-MP3 uploads before they hit the API.</li>
+            <li>Rejects files that are not MP3 uploads before they hit the API.</li>
             <li>
               Keeps browser uploads under {formatFileSize(MAX_FILE_SIZE_BYTES)}. Use the
               standalone server for larger files.
             </li>
-            <li>Surfaces server and platform errors directly in the console.</li>
+            <li>Shows recovery-focused messages for validation, server, and platform errors.</li>
           </ul>
         </div>
       </aside>
