@@ -9,6 +9,8 @@ interface IUploadZoneProps {
 }
 
 const MAX_FILE_SIZE_BYTES = 4.5 * 1024 * 1024;
+const IS_VERCEL_WEB_APP =
+  typeof window !== 'undefined' && window.location.hostname.endsWith('.vercel.app');
 
 function formatFileSize(size: number) {
   if (size >= 1024 * 1024) {
@@ -31,7 +33,9 @@ function getValidationError(file: File) {
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return 'This upload exceeds the 4.5 MB Vercel function body limit.';
+    return IS_VERCEL_WEB_APP
+      ? 'The hosted web app only accepts uploads up to 4.5 MB.'
+      : 'This browser UI keeps uploads under 4.5 MB. Use the standalone server for larger files.';
   }
 
   return null;
@@ -159,7 +163,8 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                   </h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-muted)] sm:text-base">
                     The parser locks onto valid consecutive MPEG1 Layer III frames, skips ID3v2
-                    headers, and returns a clean logical frame count.
+                    headers, and returns the Xing-style frame count alongside the full logical
+                    stream count.
                   </p>
                 </div>
               </div>
@@ -175,14 +180,16 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                   <p className="text-[0.68rem] uppercase tracking-[0.24em] text-[var(--text-soft)]">
                     Frontend Cap
                   </p>
-                  <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">4.5 MB</p>
+                  <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">
+                    4.5 MB in this UI
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-[var(--line-soft)] bg-white/4 px-4 py-4">
                   <p className="text-[0.68rem] uppercase tracking-[0.24em] text-[var(--text-soft)]">
                     Output
                   </p>
                   <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">
-                    Logical frame count
+                    Xing and logical counts
                   </p>
                 </div>
               </div>
@@ -307,8 +314,11 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
           </p>
           <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--text-muted)]">
             <li>Rejects non-MP3 uploads before they hit the API.</li>
-            <li>Caps browser-side uploads at {formatFileSize(MAX_FILE_SIZE_BYTES)}.</li>
-            <li>Hands server errors back into the main console without reloads.</li>
+            <li>
+              Keeps browser uploads under {formatFileSize(MAX_FILE_SIZE_BYTES)}. Use the
+              standalone server for larger files.
+            </li>
+            <li>Surfaces server and platform errors directly in the console.</li>
           </ul>
         </div>
       </aside>

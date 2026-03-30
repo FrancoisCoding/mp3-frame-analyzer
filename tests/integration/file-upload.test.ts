@@ -22,7 +22,8 @@ describe('POST /file-upload', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'No file provided',
+      error: 'No file was uploaded.',
+      code: 'NO_FILE_PROVIDED',
     });
   });
 
@@ -35,7 +36,8 @@ describe('POST /file-upload', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Invalid file type. Expected MP3 (MPEG1 Layer 3)',
+      error: 'Expected an MP3 file with MPEG1 Layer 3 audio.',
+      code: 'INVALID_FILE_TYPE',
     });
   });
 
@@ -87,7 +89,8 @@ describe('POST /file-upload', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'No valid MPEG1 Layer 3 frames found in file',
+      error: 'The uploaded file did not contain readable MPEG1 Layer 3 frames.',
+      code: 'NO_VALID_MPEG1_LAYER3_FRAMES',
     });
   });
 });
