@@ -1,1 +1,0 @@
-fix: align Vercel config with current function limits
