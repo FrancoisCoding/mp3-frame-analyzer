@@ -1,0 +1,1 @@
+ci: add Prettier check to the quality gate
