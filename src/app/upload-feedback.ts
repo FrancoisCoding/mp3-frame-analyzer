@@ -76,7 +76,8 @@ export function getUploadErrorFeedback(
   if (response.status === 413) {
     return {
       title: 'File too large for this web app',
-      detail: 'This web deployment only accepts uploads up to 4.5 MB. Run locally for larger files.',
+      detail:
+        'This web deployment only accepts uploads up to 4.5 MB. Run locally for larger files.',
     };
   }
 

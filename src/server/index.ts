@@ -25,10 +25,7 @@ app.post('/file-upload', async (context) => {
 
     if (!isMp3Buffer(buffer)) {
       return context.json(
-        buildErrorResponse(
-          'Expected an MP3 file with MPEG1 Layer 3 audio.',
-          'INVALID_FILE_TYPE',
-        ),
+        buildErrorResponse('Expected an MP3 file with MPEG1 Layer 3 audio.', 'INVALID_FILE_TYPE'),
         400,
       );
     }
