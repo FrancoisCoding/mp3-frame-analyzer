@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
-import { countMp3Frames } from '../utils/mp3-parser';
-import { isMp3Buffer } from '../utils/validators';
+import { countMp3Frames } from '../utils/mp3-parser.js';
+import { isMp3Buffer } from '../utils/validators.js';
 
 export const app = new Hono();
 

@@ -4,7 +4,7 @@ import {
   MPEG_VERSION_1,
   LAYER_3,
   FRAME_HEADER_SIZE,
-} from './mp3-constants';
+} from './mp3-constants.js';
 
 /** Decoded MPEG1 Layer 3 frame header. */
 export interface FrameHeader {

@@ -1,6 +1,6 @@
-import { getID3v2TagSize } from './id3-reader';
-import { decodeFrameHeader } from './frame-header';
-import { FRAME_HEADER_SIZE } from './mp3-constants';
+import { getID3v2TagSize } from './id3-reader.js';
+import { decodeFrameHeader } from './frame-header.js';
+import { FRAME_HEADER_SIZE } from './mp3-constants.js';
 
 /** Result of parsing an MP3 buffer for frame count. */
 export interface ParseResult {
