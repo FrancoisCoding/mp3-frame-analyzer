@@ -24,6 +24,35 @@ frames because it counts all valid MPEG frames, including the Xing frame.
 - Tooling: TypeScript, ESLint, Prettier
 - Deployment: Vercel, GitHub Actions
 
+## Planning And Review Workflow
+
+This repository now includes the planning artifacts that were used before
+implementation started:
+
+- `docs/superpowers/specs/2026-03-30-mp3-frame-analyzer-design.md`
+- `docs/superpowers/plans/2026-03-30-mp3-frame-analyzer.md`
+
+The workflow was intentionally design-first:
+
+1. Requirements, constraints, expected behavior, deployment targets, and UI
+   goals were written down in a design spec before code execution started.
+2. That design was expanded into an implementation plan with explicit tasks,
+   verification steps, and commit boundaries.
+3. The plan was reviewed before execution. The review surfaced a deployment
+   issue: `vercel.json` needed `maxBodyLength`, and that was fixed before
+   proceeding.
+4. Implementation then executed against the reviewed plan rather than relying
+   on ad hoc coding decisions.
+
+The purpose of keeping these docs in-repo is to show that the AI did not jump
+straight into code. It first worked from reviewed written requirements so the
+API contract, parser behavior, frontend scope, CI expectations, and deployment
+details were clarified up front.
+
+That up-front clarification stage is where open questions, assumptions, and
+implementation details were supposed to be surfaced and resolved before the AI
+started executing the plan.
+
 ## API
 
 ### `POST /file-upload`
@@ -206,6 +235,6 @@ sample rate table, and the parsing constants shared across the parser helpers.
 
 GitHub Actions runs:
 
-- lint and type-check
+- lint, formatting, and type-check
 - unit tests
 - integration tests
