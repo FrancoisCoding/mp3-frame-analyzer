@@ -1,0 +1,1 @@
+feat: add Vite, Tailwind, and React frontend scaffolding
