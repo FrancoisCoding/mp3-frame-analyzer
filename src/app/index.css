@@ -1,1 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 @import 'tailwindcss';
+
+:root {
+  --font-body: 'Manrope', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --surface-950: oklch(0.16 0.02 240);
+  --surface-900: oklch(0.2 0.022 240);
+  --panel: color-mix(in oklab, var(--surface-900) 88%, white 12%);
+  --panel-muted: color-mix(in oklab, var(--surface-900) 93%, white 7%);
+  --line-soft: rgba(196, 216, 216, 0.12);
+  --line-strong: rgba(104, 195, 191, 0.22);
+  --text-strong: oklch(0.95 0.012 220);
+  --text-muted: oklch(0.75 0.02 225);
+  --text-soft: oklch(0.63 0.018 225);
+  --accent-cool: oklch(0.8 0.11 196);
+  --accent-warm: oklch(0.82 0.12 72);
+}
+
+@theme {
+  --font-sans: var(--font-body);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--surface-950);
+  color: var(--text-strong);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.wave-bar {
+  width: 100%;
+  min-width: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
