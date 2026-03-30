@@ -75,7 +75,8 @@ Success response:
 
 ```json
 {
-  "frameCount": 6090
+  "frameCount": 6089,
+  "logicalFrameCount": 6090
 }
 ```
 
@@ -112,6 +113,11 @@ for a valid MPEG sync word, decodes candidate headers, and verifies that a
 candidate frame is followed by another valid frame at the expected offset. Once
 it locks onto a valid sequence, it advances frame-by-frame until the sequence
 breaks, then resumes scanning.
+
+The API now exposes two counts:
+
+- `frameCount`: the Xing-style count intended to match requirement-facing tools
+- `logicalFrameCount`: the full valid MPEG frame count found in the stream
 
 Frame size is computed with:
 

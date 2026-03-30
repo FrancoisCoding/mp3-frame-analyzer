@@ -7,12 +7,14 @@ describe('countMp3Frames', () => {
   it('returns zero frames for an empty buffer', () => {
     const result = countMp3Frames(Buffer.alloc(0));
     expect(result.frameCount).toBe(0);
+    expect(result.logicalFrameCount).toBe(0);
   });
 
   it('returns zero frames for random data', () => {
     const buf = Buffer.from('this is not an mp3 file at all');
     const result = countMp3Frames(buf);
     expect(result.frameCount).toBe(0);
+    expect(result.logicalFrameCount).toBe(0);
   });
 
   it('does not count a single isolated MPEG1 Layer III frame', () => {
@@ -26,6 +28,7 @@ describe('countMp3Frames', () => {
     buf[3] = 0x00;
     const result = countMp3Frames(buf);
     expect(result.frameCount).toBe(0);
+    expect(result.logicalFrameCount).toBe(0);
   });
 
   it('parses two consecutive valid frames', () => {
@@ -43,6 +46,7 @@ describe('countMp3Frames', () => {
     buf[frameSize + 3] = 0x00;
     const result = countMp3Frames(buf);
     expect(result.frameCount).toBe(2);
+    expect(result.logicalFrameCount).toBe(2);
   });
 
   it('skips ID3v2 tag and finds frames after it', () => {
@@ -76,6 +80,7 @@ describe('countMp3Frames', () => {
 
     const result = countMp3Frames(buf);
     expect(result.frameCount).toBe(2);
+    expect(result.logicalFrameCount).toBe(2);
   });
 
   it('skips false sync words that do not form consecutive frames', () => {
@@ -89,12 +94,39 @@ describe('countMp3Frames', () => {
     // and find nothing else
     const result = countMp3Frames(buf);
     expect(result.frameCount).toBe(0);
+    expect(result.logicalFrameCount).toBe(0);
   });
 
-  it('counts all valid MPEG frames in sample.mp3, including the Xing frame', () => {
+  it('exposes Xing-style and logical counts separately when the first frame is a Xing frame', () => {
+    const frameSize = 417;
+    const buf = Buffer.alloc(frameSize * 2, 0);
+
+    buf[0] = 0xff;
+    buf[1] = 0xfb;
+    buf[2] = 0x90;
+    buf[3] = 0x00;
+
+    buf[36] = 0x58;
+    buf[37] = 0x69;
+    buf[38] = 0x6e;
+    buf[39] = 0x67;
+
+    buf[frameSize] = 0xff;
+    buf[frameSize + 1] = 0xfb;
+    buf[frameSize + 2] = 0x90;
+    buf[frameSize + 3] = 0x00;
+
+    const result = countMp3Frames(buf);
+
+    expect(result.frameCount).toBe(1);
+    expect(result.logicalFrameCount).toBe(2);
+  });
+
+  it('returns both Xing-style and logical counts for sample.mp3', () => {
     const samplePath = resolve(__dirname, '../../fixtures/sample.mp3');
     const buffer = readFileSync(samplePath);
     const result = countMp3Frames(buffer);
-    expect(result.frameCount).toBe(6090);
+    expect(result.frameCount).toBe(6089);
+    expect(result.logicalFrameCount).toBe(6090);
   });
 });

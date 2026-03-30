@@ -12,6 +12,10 @@ export interface FrameHeader {
   bitrate: number;
   /** Sample rate in Hz. */
   sampleRate: number;
+  /** Whether the frame stores a CRC immediately after the header. */
+  hasCrc: boolean;
+  /** MPEG channel mode bits. */
+  channelMode: number;
   /** Whether this frame has a padding byte. */
   padding: boolean;
   /** Total frame size in bytes (header + audio data). */
@@ -67,6 +71,9 @@ export function decodeFrameHeader(buffer: Buffer, offset: number): FrameHeader |
     return null;
   }
 
+  // Bit [16] — Protection (0 = CRC present, 1 = no CRC)
+  const hasCrc = ((header >>> 16) & 1) === 0;
+
   // Bits [15:12] — Bitrate index
   const bitrateIndex = (header >>> 12) & 0xf;
   const bitrate = MPEG1_LAYER3_BITRATES[bitrateIndex];
@@ -84,8 +91,11 @@ export function decodeFrameHeader(buffer: Buffer, offset: number): FrameHeader |
   // Bit [9] — Padding
   const padding = ((header >>> 9) & 1) === 1;
 
+  // Bits [7:6] — Channel mode
+  const channelMode = (header >>> 6) & 0b11;
+
   // Frame size: floor(144 * bitrate / sampleRate) + padding
   const frameSize = Math.floor((144 * bitrate) / sampleRate) + (padding ? 1 : 0);
 
-  return { bitrate, sampleRate, padding, frameSize };
+  return { bitrate, sampleRate, hasCrc, channelMode, padding, frameSize };
 }

@@ -49,7 +49,8 @@ describe('POST /file-upload', () => {
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({
-      frameCount: 6090,
+      frameCount: 6089,
+      logicalFrameCount: 6090,
     });
   });
 

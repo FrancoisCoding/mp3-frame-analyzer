@@ -4,8 +4,35 @@ import { FRAME_HEADER_SIZE } from './mp3-constants.js';
 
 /** Result of parsing an MP3 buffer for frame count. */
 export interface ParseResult {
-  /** Total number of valid MPEG1 Layer 3 frames found. */
+  /** Xing-style frame count intended for requirement-facing output. */
   frameCount: number;
+  /** Total number of valid MPEG1 Layer 3 frames found in the stream. */
+  logicalFrameCount: number;
+}
+
+const XING_MARKER = Buffer.from('Xing');
+const INFO_MARKER = Buffer.from('Info');
+const MONO_CHANNEL_MODE = 0b11;
+const STEREO_SIDE_INFO_SIZE = 32;
+const MONO_SIDE_INFO_SIZE = 17;
+
+function isXingFrame(
+  buffer: Buffer,
+  offset: number,
+  header: NonNullable<ReturnType<typeof decodeFrameHeader>>,
+): boolean {
+  const sideInfoSize =
+    header.channelMode === MONO_CHANNEL_MODE ? MONO_SIDE_INFO_SIZE : STEREO_SIDE_INFO_SIZE;
+  const crcSize = header.hasCrc ? 2 : 0;
+  const markerOffset = offset + FRAME_HEADER_SIZE + crcSize + sideInfoSize;
+
+  if (markerOffset + 4 > buffer.length) {
+    return false;
+  }
+
+  const marker = buffer.subarray(markerOffset, markerOffset + 4);
+
+  return marker.equals(XING_MARKER) || marker.equals(INFO_MARKER);
 }
 
 /**
@@ -24,12 +51,14 @@ export interface ParseResult {
  */
 export function countMp3Frames(buffer: Buffer): ParseResult {
   if (buffer.length < FRAME_HEADER_SIZE) {
-    return { frameCount: 0 };
+    return { frameCount: 0, logicalFrameCount: 0 };
   }
 
   let offset = getID3v2TagSize(buffer);
-  let frameCount = 0;
+  let logicalFrameCount = 0;
   let locked = false;
+  let firstFrameOffset: number | null = null;
+  let firstFrameHeader: NonNullable<ReturnType<typeof decodeFrameHeader>> | null = null;
 
   while (offset + FRAME_HEADER_SIZE <= buffer.length) {
     // Look for sync word: 0xFF followed by byte with top 3 bits set
@@ -65,9 +94,21 @@ export function countMp3Frames(buffer: Buffer): ParseResult {
       locked = true;
     }
 
-    frameCount++;
+    if (firstFrameOffset === null) {
+      firstFrameOffset = offset;
+      firstFrameHeader = header;
+    }
+
+    logicalFrameCount++;
     offset += header.frameSize;
   }
 
-  return { frameCount };
+  const hasXingFirstFrame =
+    firstFrameOffset !== null &&
+    firstFrameHeader !== null &&
+    isXingFrame(buffer, firstFrameOffset, firstFrameHeader);
+  const frameCount =
+    hasXingFirstFrame && logicalFrameCount > 0 ? logicalFrameCount - 1 : logicalFrameCount;
+
+  return { frameCount, logicalFrameCount };
 }

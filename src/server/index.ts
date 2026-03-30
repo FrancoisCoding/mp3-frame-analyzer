@@ -29,7 +29,10 @@ app.post('/file-upload', async (context) => {
       return context.json({ error: 'No valid MPEG1 Layer 3 frames found in file' }, 400);
     }
 
-    return context.json({ frameCount: result.frameCount });
+    return context.json({
+      frameCount: result.frameCount,
+      logicalFrameCount: result.logicalFrameCount,
+    });
   } catch (error) {
     console.error('Unexpected error processing upload:', error);
     return context.json({ error: 'Internal server error' }, 500);

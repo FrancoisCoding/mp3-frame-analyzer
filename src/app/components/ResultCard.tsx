@@ -6,6 +6,7 @@ import { Binary, FileAudio, HardDriveDownload, Layers3 } from 'lucide-react';
 interface IResultCardProps {
   result: {
     frameCount: number;
+    logicalFrameCount: number;
     filename: string;
     fileSize: number;
   };
@@ -55,14 +56,14 @@ export function ResultCard({ result }: IResultCardProps) {
           </div>
 
           <p className="mt-5 text-[0.72rem] uppercase tracking-[0.26em] text-[var(--text-soft)]">
-            Logical frame count
+            Xing-style frame count
           </p>
           <div className="mt-3 flex flex-wrap items-end gap-4">
             <div className="font-[var(--font-display)] text-[clamp(3.4rem,10vw,7rem)] leading-none tracking-[-0.08em] text-[var(--text-strong)]">
               {displayCount.toLocaleString()}
             </div>
             <div className="pb-2 text-sm text-[var(--text-muted)]">
-              Valid MPEG1 Layer III frames identified in this upload.
+              Requirement-facing count aligned to the Xing metadata convention.
             </div>
           </div>
         </div>
@@ -92,8 +93,13 @@ export function ResultCard({ result }: IResultCardProps) {
               icon: HardDriveDownload,
             },
             {
+              label: 'Logical Frames',
+              value: result.logicalFrameCount.toLocaleString(),
+              icon: Layers3,
+            },
+            {
               label: 'Frame Density',
-              value: `${Math.max(1, Math.round(result.frameCount / Math.max(1, result.fileSize / 1024)))} per KB`,
+              value: `${Math.max(1, Math.round(result.logicalFrameCount / Math.max(1, result.fileSize / 1024)))} per KB`,
               icon: Binary,
             },
           ].map((item) => (

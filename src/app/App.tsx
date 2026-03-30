@@ -8,6 +8,7 @@ import { useUploadHistory } from './hooks/useUploadHistory';
 
 interface IAnalysisResult {
   frameCount: number;
+  logicalFrameCount: number;
   filename: string;
   fileSize: number;
 }
@@ -34,16 +35,22 @@ export function App() {
       });
       const json = (await response.json()) as {
         frameCount?: number;
+        logicalFrameCount?: number;
         error?: string;
       };
 
-      if (!response.ok || typeof json.frameCount !== 'number') {
+      if (
+        !response.ok ||
+        typeof json.frameCount !== 'number' ||
+        typeof json.logicalFrameCount !== 'number'
+      ) {
         setError(json.error ?? 'The analyzer could not process that upload.');
         return;
       }
 
       const nextResult: IAnalysisResult = {
         frameCount: json.frameCount,
+        logicalFrameCount: json.logicalFrameCount,
         filename: file.name,
         fileSize: file.size,
       };
