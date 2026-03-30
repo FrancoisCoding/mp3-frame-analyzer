@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [{ "source": "/file-upload", "destination": "/api/file-upload" }],
+  "functions": {
+    "api/file-upload.ts": {
+      "maxDuration": 30,
+      "maxBodyLength": 52428800
+    }
+  }
+}
