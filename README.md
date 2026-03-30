@@ -16,6 +16,17 @@ Vite/React frontend, and a deployment path for Vercel or standalone Node use.
 For the included `fixtures/sample.mp3`, the current parser returns `6090`
 frames because it counts all valid MPEG frames, including the Xing frame.
 
+## Try It Online
+
+You can test the deployed web app without any local installation or setup at:
+
+https://mp3-frame-analyzer.vercel.app/
+
+Important: the hosted Vercel web app is limited to `4.5 MB` uploads because
+Vercel Node.js functions currently enforce a `4.5 MB` request/response body
+limit. For larger MP3 files, run the standalone server or deploy the API to a
+host that accepts larger request bodies.
+
 ## Stack
 
 - API: Hono, `@hono/node-server`
