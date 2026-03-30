@@ -5,8 +5,7 @@
   "rewrites": [{ "source": "/file-upload", "destination": "/api/file-upload" }],
   "functions": {
     "api/file-upload.ts": {
-      "maxDuration": 30,
-      "maxBodyLength": 52428800
+      "maxDuration": 30
     }
   }
 }

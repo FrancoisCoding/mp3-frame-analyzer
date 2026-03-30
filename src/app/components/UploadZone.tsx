@@ -8,7 +8,7 @@ interface IUploadZoneProps {
   isLoading: boolean;
 }
 
-const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
+const MAX_FILE_SIZE_BYTES = 4.5 * 1024 * 1024;
 
 function formatFileSize(size: number) {
   if (size >= 1024 * 1024) {
@@ -31,7 +31,7 @@ function getValidationError(file: File) {
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return 'This upload exceeds the 50 MB client-side limit.';
+    return 'This upload exceeds the 4.5 MB Vercel function body limit.';
   }
 
   return null;
@@ -175,7 +175,7 @@ export function UploadZone({ onUpload, isLoading }: IUploadZoneProps) {
                   <p className="text-[0.68rem] uppercase tracking-[0.24em] text-[var(--text-soft)]">
                     Frontend Cap
                   </p>
-                  <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">50 MB</p>
+                  <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">4.5 MB</p>
                 </div>
                 <div className="rounded-2xl border border-[var(--line-soft)] bg-white/4 px-4 py-4">
                   <p className="text-[0.68rem] uppercase tracking-[0.24em] text-[var(--text-soft)]">

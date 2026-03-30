@@ -148,7 +148,10 @@ Index: 0=44100, 1=48000, 2=32000
 | 400    | No frames found        | `{ "error": "No valid MPEG1 Layer 3 frames found in file" }` |
 | 500    | Unexpected error       | `{ "error": "Internal server error" }`                     |
 
-**No server-side file size limit.** The API processes whatever it receives. Vercel's serverless payload limit (configurable up to 50MB in `vercel.json`) is the only hard constraint in that environment. Standalone Hono server has no limit.
+**No server-side file size limit in standalone mode.** The standalone Hono
+server processes whatever it receives. For Vercel deployments, the current
+Node.js function request and response body limit is 4.5 MB, and that limit is
+not configurable through `vercel.json`.
 
 ## Frontend Design
 
@@ -156,7 +159,10 @@ Index: 0=44100, 1=48000, 2=32000
 
 ### Components
 
-- **UploadZone:** Drag-and-drop area with click-to-browse fallback. Animated border with audio waveform visual effect on drag-over. Client-side validation: file type (.mp3) and size (50MB max, frontend only). Shows upload progress with animated waveform indicator.
+- **UploadZone:** Drag-and-drop area with click-to-browse fallback. Animated
+  border with audio waveform visual effect on drag-over. Client-side validation:
+  file type (.mp3) and size (4.5 MB max for Vercel deployments). Shows upload
+  progress with animated waveform indicator.
 - **ResultCard:** Displays frame count prominently with animated count-up effect, plus metadata extracted from the parser response: file name, file size. Card with depth and layered visual treatment.
 - **UploadHistory:** List of previous analyses stored in localStorage. Shows filename, frame count, timestamp. Clearable. Staggered entrance animations on items.
 - **Layout:** Dark-themed app shell with subtle gradient backgrounds, professional typography, and refined spacing. No emojis — strictly typographic and iconographic visual language.
@@ -184,7 +190,8 @@ Index: 0=44100, 1=48000, 2=32000
 `vercel.json`:
 - Rewrites `/file-upload` to `api/file-upload.ts` serverless function
 - All other routes serve the Vite-built frontend
-- `maxDuration` and `maxBodyLength` configured for larger files
+- `maxDuration` configured, with Vercel's platform body limit documented rather
+  than configured in `vercel.json`
 
 ### Standalone API
 
@@ -227,9 +234,10 @@ This spec was used before implementation, not after it. The working process was:
 3. Review the plan before coding so missing assumptions could be corrected.
 4. Execute only after the reviewed plan was approved.
 
-The pre-execution review found one concrete issue: the Vercel deployment config
-needed `maxBodyLength` so larger uploads would be accepted. That was corrected
-before implementation continued.
+Later deployment verification found that Vercel does not accept
+`maxBodyLength` in `vercel.json`, and the current documented Node.js function
+body limit is 4.5 MB. The repository now reflects that platform constraint
+directly.
 
 One implementation-time correction also matters for readers of this spec: older
 planning notes referenced `6089` frames for `sample.mp3`, but the verified

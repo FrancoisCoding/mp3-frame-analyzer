@@ -1,8 +1,9 @@
 # MP3 Frame Analyzer Implementation Plan
 
-> **Review status:** This plan was reviewed before execution. The reviewer found
-> one deployment issue: `vercel.json` needed `maxBodyLength`. That issue was
-> fixed before implementation resumed.
+> **Review status:** This plan was reviewed before execution. Later deployment
+> verification showed that Vercel does not accept `maxBodyLength` in
+> `vercel.json`, so the final repository removes that property and documents the
+> platform's current 4.5 MB function body limit instead.
 
 > **Execution model:** This plan was intended to be executed only after the
 > requirements and design work had already been clarified in the spec. It is the
@@ -1431,7 +1432,7 @@ Build this with technically ambitious interactions:
 - Animated gradient border on drag-over
 - Waveform-style idle animation
 - Upload progress with animated bar
-- File type and size validation (client-side 50MB max)
+- File type and size validation (client-side 4.5 MB max for Vercel deployment)
 - Drop state transitions with spring physics
 
 ```tsx
@@ -1581,7 +1582,6 @@ git commit -m "feat: add polished frontend dashboard with upload, results, and h
   "functions": {
     "api/file-upload.ts": {
       "maxDuration": 30,
-      "maxBodyLength": 52428800
     }
   }
 }

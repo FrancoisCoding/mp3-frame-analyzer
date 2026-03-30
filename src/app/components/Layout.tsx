@@ -62,7 +62,7 @@ export function Layout({ children }: ILayoutProps) {
                   Frontend Guardrail
                 </div>
                 <p className="mt-2 text-sm font-medium text-[var(--text-strong)]">
-                  50 MB client-side upload cap
+                  4.5 MB Vercel upload cap
                 </p>
               </div>
             </div>

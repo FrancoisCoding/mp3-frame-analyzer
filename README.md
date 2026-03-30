@@ -38,9 +38,10 @@ The workflow was intentionally design-first:
    goals were written down in a design spec before code execution started.
 2. That design was expanded into an implementation plan with explicit tasks,
    verification steps, and commit boundaries.
-3. The plan was reviewed before execution. The review surfaced a deployment
-   issue: `vercel.json` needed `maxBodyLength`, and that was fixed before
-   proceeding.
+3. The plan was reviewed before execution. Later deployment verification showed
+   that Vercel no longer accepts `maxBodyLength` in `vercel.json`, so the final
+   repository removes that property and documents the platform's actual body
+   limit instead.
 4. Implementation then executed against the reviewed plan rather than relying
    on ad hoc coding decisions.
 
@@ -171,7 +172,9 @@ npm run format:check
 
 The included `vercel.json` builds the Vite frontend and rewrites
 `/file-upload` to the Vercel function in `api/file-upload.ts`. The function is
-configured with a `30` second max duration and a `50 MB` body limit.
+configured with a `30` second max duration. Vercel's current Node.js function
+request and response body limit is `4.5 MB`, so larger uploads need a
+standalone server or a different upload architecture.
 
 ### API-Only Deployment
 
