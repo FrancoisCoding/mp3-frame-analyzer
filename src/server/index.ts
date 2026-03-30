@@ -20,19 +20,13 @@ app.post('/file-upload', async (context) => {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     if (!isMp3Buffer(buffer)) {
-      return context.json(
-        { error: 'Invalid file type. Expected MP3 (MPEG1 Layer 3)' },
-        400,
-      );
+      return context.json({ error: 'Invalid file type. Expected MP3 (MPEG1 Layer 3)' }, 400);
     }
 
     const result = countMp3Frames(buffer);
 
     if (result.frameCount === 0) {
-      return context.json(
-        { error: 'No valid MPEG1 Layer 3 frames found in file' },
-        400,
-      );
+      return context.json({ error: 'No valid MPEG1 Layer 3 frames found in file' }, 400);
     }
 
     return context.json({ frameCount: result.frameCount });

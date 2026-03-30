@@ -13,12 +13,7 @@ export function isMp3Buffer(buffer: Buffer): boolean {
   }
 
   // Check for ID3v2 tag ("ID3")
-  if (
-    buffer.length >= 3 &&
-    buffer[0] === 0x49 &&
-    buffer[1] === 0x44 &&
-    buffer[2] === 0x33
-  ) {
+  if (buffer.length >= 3 && buffer[0] === 0x49 && buffer[1] === 0x44 && buffer[2] === 0x33) {
     return true;
   }
 

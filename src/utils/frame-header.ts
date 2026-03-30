@@ -51,7 +51,7 @@ export function decodeFrameHeader(buffer: Buffer, offset: number): FrameHeader |
   const header = buffer.readUInt32BE(offset);
 
   // Bits [31:21] — sync word (must be all 1s)
-  if ((header >>> 21) !== 0x7ff) {
+  if (header >>> 21 !== 0x7ff) {
     return null;
   }
 

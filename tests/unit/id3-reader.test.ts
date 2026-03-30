@@ -16,10 +16,16 @@ describe('getID3v2TagSize', () => {
     // ID3v2.4.0, no flags, size = 0x00 0x00 0x00 0x22 = 34 bytes
     // Total = 10 (header) + 34 = 44
     const buf = Buffer.from([
-      0x49, 0x44, 0x33, // "ID3"
-      0x04, 0x00, //       version 2.4.0
+      0x49,
+      0x44,
+      0x33, // "ID3"
+      0x04,
+      0x00, //       version 2.4.0
       0x00, //             flags
-      0x00, 0x00, 0x00, 0x22, // syncsafe size = 34
+      0x00,
+      0x00,
+      0x00,
+      0x22, // syncsafe size = 34
     ]);
     expect(getID3v2TagSize(buf)).toBe(44);
   });
@@ -27,12 +33,7 @@ describe('getID3v2TagSize', () => {
   it('parses larger syncsafe integer correctly', () => {
     // syncsafe: 0x00 0x00 0x02 0x01 = (0 << 21) | (0 << 14) | (2 << 7) | 1 = 257
     // Total = 10 + 257 = 267
-    const buf = Buffer.from([
-      0x49, 0x44, 0x33,
-      0x03, 0x00,
-      0x00,
-      0x00, 0x00, 0x02, 0x01,
-    ]);
+    const buf = Buffer.from([0x49, 0x44, 0x33, 0x03, 0x00, 0x00, 0x00, 0x00, 0x02, 0x01]);
     expect(getID3v2TagSize(buf)).toBe(267);
   });
 

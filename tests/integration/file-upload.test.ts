@@ -7,7 +7,7 @@ import { app } from '../../src/server/index';
 
 function buildFormData(filename: string, content: Buffer): FormData {
   const formData = new FormData();
-  const blob = new Blob([content], { type: 'audio/mpeg' });
+  const blob = new Blob([new Uint8Array(content)], { type: 'audio/mpeg' });
 
   formData.append('file', blob, filename);
 

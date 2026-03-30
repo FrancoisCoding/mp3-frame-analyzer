@@ -9,20 +9,13 @@ export interface ParseResult {
 }
 
 /**
- * Number of consecutive valid frames needed to "lock on" to a frame sequence.
- * Prevents false positives from random bytes matching the sync pattern.
- */
-const LOCK_ON_THRESHOLD = 2;
-
-/**
  * Counts the number of MPEG1 Layer 3 frames in an MP3 file buffer.
  *
  * Algorithm:
  * 1. Skip any ID3v2 tag at the start of the buffer.
  * 2. Scan for the MPEG sync word (0xFF followed by 0xE0+ mask).
  * 3. When a candidate sync is found, decode the frame header.
- * 4. Validate by checking that the next frame starts at the expected offset
- *    (consecutive frame validation with a threshold of 2).
+ * 4. Validate by checking that the next frame starts at the expected offset.
  * 5. Once locked on, count sequentially by jumping frame-size bytes.
  * 6. If the sequence breaks, re-enter scanning mode.
  *
